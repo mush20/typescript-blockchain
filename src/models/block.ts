@@ -30,4 +30,9 @@ export class Block<T = any> {
     static hash<T = any>(timestamp: number, previousHash: string, data: T): string {
         return SHA256(`${timestamp}${previousHash}${data}`).toString();
     }
+
+    static blockHash<T = any>(block: Block<T>): string {
+        const {timestamp, previousHash, data} = block;
+        return Block.hash(timestamp, previousHash, data);
+    }
 }
