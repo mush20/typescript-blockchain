@@ -8,8 +8,8 @@ describe('Model: Block', () => {
     let block: Block;
 
     beforeEach(() => {
-        genesis = Block.genesis();
-        block = new Block(timestamp, genesis.hash, 'baz', 0, data);
+        genesis = Block.genesis(4);
+        block = new Block(timestamp, genesis.hash, 'baz', 0, 4, data);
     });
 
     it('should create an instance of Block', () => {
@@ -26,6 +26,7 @@ describe('Model: Block', () => {
             Previous Hash   : -----
             Hash            : f1r57-h45h
             Nonce           : 0
+            Difficulty      : 4
             Data            : ${[]}
         `;
 

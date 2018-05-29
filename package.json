@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest --watch",
     "start": "nodemon -x ts-node -r tsconfig-paths/register src/app.ts"
   },
   "keywords": [

@@ -1,5 +1,5 @@
 import { JsonController, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
-import { Inject, Container } from 'typedi';
+import { Inject } from 'typedi';
 import { BlockchainService } from '@app/services/blockchain.service';
 import { P2pService } from '@app/services/p2p.service';
 
@@ -14,7 +14,6 @@ export class BlockchainController {
 
     @Get('/')
     getAll() {
-        console.log(Container.get(BlockchainService).getChain());
         return this._blockchainService.getChain();
     }
 

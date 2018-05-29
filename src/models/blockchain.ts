@@ -4,8 +4,8 @@ export class Blockchain<T = any> {
 
     private _chain: Block<T>[];
 
-    constructor() {
-        this._chain = [Block.genesis()];
+    constructor(difficult) {
+        this._chain = [Block.genesis(difficult)];
     }
 
     get chain(): Block<T>[] {

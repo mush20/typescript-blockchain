@@ -4,6 +4,7 @@ export class Block<T = any> {
                 public previousHash: string,
                 public hash: string,
                 public nonce: number,
+                public difficulty: number,
                 public data: T) {
 
     }
@@ -14,11 +15,12 @@ export class Block<T = any> {
             Previous Hash   : ${this.previousHash.substring(0, 10)}
             Hash            : ${this.hash.substring(0, 10)}
             Nonce           : ${this.nonce}
+            Difficulty      : ${this.difficulty}
             Data            : ${this.data}
         `;
     }
 
-    static genesis(): Block {
-        return new this(0, '-----', 'f1r57-h45h', 0, []);
+    static genesis(difficult: number): Block {
+        return new Block(0, '-----', 'f1r57-h45h', 0, difficult, []);
     }
 }
