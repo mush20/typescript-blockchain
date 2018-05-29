@@ -20,7 +20,7 @@ class ConfigServiceMock {
     }
 }
 
-describe('Model: Block', () => {
+describe('Service: Blockchain', () => {
 
     let bcs1: BlockchainService<string>;
     let bcs2: BlockchainService<string>;
@@ -92,7 +92,7 @@ describe('Model: Block', () => {
             bcs3.mine('foo');
             bcs3.mine('foo');
             const expected = bcs3.mine('foo');
-            
+
             expect(expected.difficulty).toEqual(4);
 
         });

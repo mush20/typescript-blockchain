@@ -16,5 +16,6 @@ module.exports = {
     ],
     "moduleNameMapper": {
         "@app/([./a-zA-Z0-9$_-]+)": "<rootDir>/src/$1",
-    }
+    },
+    "testEnvironment": "node"
 }

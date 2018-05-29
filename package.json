@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watch",
+    "test:all": "jest --watchAll",
     "start": "nodemon -x ts-node -r tsconfig-paths/register src/app.ts"
   },
   "keywords": [
@@ -19,6 +20,7 @@
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-router": "^7.0.28",
     "@types/node": "^10.1.3",
+    "@types/uuid": "^3.4.3",
     "@types/ws": "^5.1.1",
     "jest": "^23.0.1",
     "nodemon": "^1.17.5",
@@ -28,6 +30,7 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
+    "elliptic": "^6.4.0",
     "es6-shim": "^0.35.3",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
@@ -37,6 +40,7 @@
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
     "typedi": "^0.7.3",
+    "uuid": "^3.2.1",
     "ws": "^5.2.0"
   }
 }
