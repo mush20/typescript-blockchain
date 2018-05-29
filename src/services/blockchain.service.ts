@@ -15,4 +15,8 @@ export class BlockchainService {
         return bc.addBlock(data);
     }
 
+    replace(chain: Block[]) {
+        bc.replace(chain);
+    }
+
 }
