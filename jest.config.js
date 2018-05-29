@@ -14,4 +14,7 @@ module.exports = {
         "json",
         "node"
     ],
+    "moduleNameMapper": {
+        "@app/([./a-zA-Z0-9$_-]+)": "<rootDir>/src/$1",
+    }
 }
