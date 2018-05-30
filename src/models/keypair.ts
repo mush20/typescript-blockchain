@@ -1,17 +1,11 @@
-const EC = require('elliptic').ec;
-const ec = new EC('secp256k1');
+import { UtilService } from '@app/services/util.service';
+
 
 export class Keypair {
 
-    readonly key = ec.genKeyPair();
-
-    constructor() {}
+    readonly key = UtilService.keyPair();
 
     get publicKey() {
         return this.key.getPublic()
-    }
-
-    static generate(): Keypair {
-        return new this();
     }
 }

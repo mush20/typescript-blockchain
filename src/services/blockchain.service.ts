@@ -1,4 +1,4 @@
-import { Service, Inject, Container } from 'typedi';
+import { Service, Container } from 'typedi';
 import { Blockchain } from '@app/models/blockchain';
 import { Block } from '@app/models/block';
 import * as SHA256 from 'crypto-js/sha256';

@@ -2,11 +2,10 @@ import { Keypair } from './keypair';
 
 export class Wallet {
 
-    readonly keyPair: Keypair;
-    readonly publicKey: any;
+    readonly keyPair: Keypair = new Keypair();
+    readonly publicKey: string;
 
     constructor(public balance: number = 0) {
-        this.keyPair = Keypair.generate();
         this.publicKey = this.keyPair.publicKey.encode('hex');
     }
 

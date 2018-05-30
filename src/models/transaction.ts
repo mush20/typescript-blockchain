@@ -1,13 +1,10 @@
 import * as uuid from 'uuid/v1';
+import { TransactionOutput } from './transaction-output';
+import { TransactionInput } from './transaction-input';
 
 export class Transaction {
 
-    txId: string = uuid();
-    input = null;
+    readonly txId: string = uuid();
+    input: TransactionInput = null;
     outputs: TransactionOutput[] = [];
-}
-
-export class TransactionOutput {
-
-    constructor(public ammount: number, public address: string) {}
 }

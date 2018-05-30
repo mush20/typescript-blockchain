@@ -1,11 +1,11 @@
 export class Block<T = any> {
 
-    constructor(public timestamp: number,
-                public previousHash: string,
-                public hash: string,
-                public nonce: number,
-                public difficulty: number,
-                public data: T) {
+    constructor(readonly timestamp: number,
+                readonly previousHash: string,
+                readonly hash: string,
+                readonly nonce: number,
+                readonly difficulty: number,
+                readonly data: T) {
 
     }
 
