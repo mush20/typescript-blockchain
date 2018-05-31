@@ -4,7 +4,7 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import { Container } from 'typedi';
 import { createKoaServer, useContainer } from 'routing-controllers';
-import { BlockchainController } from './controllers';
+import { BlockchainController, TransactionController } from './controllers';
 import { Server } from './server';
 
 const PORT: number = process.env.PORT ? parseInt( process.env.PORT, 10) : 3001;
@@ -16,7 +16,10 @@ useContainer(Container);
 
 const app: Koa = createKoaServer( {
     routePrefix: 'api',
-    controllers: [BlockchainController]
+    controllers: [
+        BlockchainController,
+        TransactionController
+    ]
 });
 
 app.use(bodyParser());

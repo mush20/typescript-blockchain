@@ -6,5 +6,5 @@ export class Transaction {
 
     readonly txId: string = uuid();
     input: TransactionInput = null;
-    outputs: TransactionOutput[] = [];
+    outputs: Array<TransactionOutput> = [];
 }

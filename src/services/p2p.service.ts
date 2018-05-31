@@ -1,6 +1,12 @@
 import * as Websocket from 'ws';
 import { Service, Inject } from 'typedi';
 import { BlockchainService } from '@app/services/blockchain.service';
+import { MessageBlockchain } from '@app/models/message-blockchain';
+import { Message } from '@app/models/message';
+import { MessageTypes } from '@app/utils';
+import { MessageTransaction } from '@app/models/message-transaction';
+import { Transaction } from '@app/models';
+import { TransactionPoolService } from '@app/services/transaction-pool.service';
 
 @Service()
 export class P2pService {
@@ -9,6 +15,9 @@ export class P2pService {
 
     @Inject()
     private _blockChainService: BlockchainService;
+
+    @Inject()
+    private _transactionPoolService: TransactionPoolService;
 
     constructor() {
     }
@@ -20,7 +29,7 @@ export class P2pService {
 
         this.receive(socket);
 
-        this.send(socket);
+        this.sendBlockchain(socket);
 
         socket.send(JSON.stringify(this._blockChainService.getChain()));
 
@@ -33,19 +42,39 @@ export class P2pService {
         });
     }
 
-    send(socket: Websocket) {
-        socket.send(JSON.stringify(this._blockChainService.getChain()));
+    sendBlockchain(socket: Websocket) {
+        const message: MessageBlockchain = new MessageBlockchain(this._blockChainService.getChain());
+        socket.send(JSON.stringify(message));
+    }
+
+    sendTransaction(socket: Websocket, transaction: Transaction) {
+        const message: MessageTransaction = new MessageTransaction(transaction);
+        socket.send(JSON.stringify(message));
     }
 
     receive(socket: Websocket): void {
         socket.on('message', (message: string) => {
-            const data = JSON.parse(message);
-            this._blockChainService.replace(data);
+
+            const parsed: Message = JSON.parse(message);
+
+            switch (parsed.type) {
+                case MessageTypes.BLOCK_CHAIN:
+                    this._blockChainService.replace(parsed.data);
+                    break;
+                case MessageTypes.TRANSACTION:
+                    this._transactionPoolService.addOrUpdate(parsed.data);
+
+            }
+
         });
     }
 
-    sync(): void {
-        this.sockets.forEach((socket: Websocket) => this.send(socket));
+    syncBlockChain(): void {
+        this.sockets.forEach((socket: Websocket) => this.sendBlockchain(socket));
+    }
+
+    syncTransaction(transaction: Transaction): void {
+        this.sockets.forEach((socket: Websocket) => this.sendTransaction(socket, transaction));
     }
 
 }
