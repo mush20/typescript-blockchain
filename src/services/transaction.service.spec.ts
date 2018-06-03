@@ -1,6 +1,7 @@
 import { TransactionService } from './transaction.service';
 import { Wallet } from '@app/models/wallet';
 import { TransactionOutput, Transaction } from '@app/models';
+import { Pair } from '@app/utils';
 
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
@@ -14,16 +15,16 @@ describe('Service: Transaction', () => {
     it('should not create a transaction as the balance is insufficient', () => {
         wallet.balance = 500;
         const amount: number = 50000;
-        const {transaction, message} = trxService.create(wallet, to, amount);
+        const {left, right} = trxService.create(wallet, to, amount);
 
-        expect(transaction).toBeNull();
-        expect(message).toEqual(`Amount ${amount} exceeds balance`);
+        expect(left).toBeNull();
+        expect(right).toEqual(`Amount ${amount} exceeds balance`);
 
     });
 
     describe('', () => {
 
-        let response: { transaction: Transaction, message: string };
+        let response: Pair<Transaction, string>;
         let amount: number = 50;
         let balance: number;
 
@@ -36,21 +37,21 @@ describe('Service: Transaction', () => {
 
         it('should create a new transaction', () => {
 
-            expect(response.transaction).not.toBeNull();
-            expect(response.message).toEqual('Transaction created successfully');
+            expect(response.left).not.toBeNull();
+            expect(response.right).toEqual('Transaction created successfully');
 
-            expect(response.transaction.outputs.length).toEqual(2);
-            expect(response.transaction.outputs.filter((out: TransactionOutput) => out.address === wallet.publicKey && out.amount === balance).length).toEqual(1);
-            expect(response.transaction.outputs.filter((out: TransactionOutput) => out.address === to && out.amount === amount).length).toEqual(1);
+            expect(response.left.outputs.length).toEqual(2);
+            expect(response.left.outputs.filter((out: TransactionOutput) => out.address === wallet.publicKey && out.amount === balance).length).toEqual(1);
+            expect(response.left.outputs.filter((out: TransactionOutput) => out.address === to && out.amount === amount).length).toEqual(1);
 
         });
 
         it('should have the correct input after signed', () => {
 
-            expect(response.transaction).not.toBeNull();
-            expect(response.message).toEqual('Transaction created successfully');
+            expect(response.left).not.toBeNull();
+            expect(response.right).toEqual('Transaction created successfully');
 
-            expect(response.transaction.input.amount).toEqual(wallet.balance);
+            expect(response.left.input.amount).toEqual(wallet.balance);
         });
 
         describe('updating transactions', () => {
@@ -60,18 +61,18 @@ describe('Service: Transaction', () => {
             beforeEach(() => {
                 nextAmount = 20;
                 nextTo = 'n3xt-r3c1p13nt';
-                response = trxService.update(response.transaction, wallet, nextTo, nextAmount);
+                response = trxService.update(response.left, wallet, nextTo, nextAmount);
             });
 
             it(`subtract the next amount from sender's output`, () => {
 
-                expect(response.transaction.outputs.find((output) => output.address === wallet.publicKey).amount).toEqual(wallet.balance - amount - nextAmount);
+                expect(response.left.outputs.find((output) => output.address === wallet.publicKey).amount).toEqual(wallet.balance - amount - nextAmount);
 
             });
 
             it(`outputs an amount for the next recipient`, () => {
 
-                expect(response.transaction.outputs.find((output) => output.address === nextTo).amount).toEqual(nextAmount);
+                expect(response.left.outputs.find((output) => output.address === nextTo).amount).toEqual(nextAmount);
 
             });
         });

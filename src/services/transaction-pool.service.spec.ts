@@ -15,13 +15,12 @@ describe('Service: TransactionPool', () => {
     beforeEach(() => {
         service = new TransactionPoolService();
         txService = new TransactionService();
-        tx = txService.create(wallet, to, amount).transaction;
+        tx = txService.create(wallet, to, amount).left;
         service.addOrUpdate(tx);
     });
 
 
     it('should not duplicate a transaction', () => {
-
 
         service.addOrUpdate(tx);
         service.addOrUpdate(tx);
@@ -39,7 +38,7 @@ describe('Service: TransactionPool', () => {
         let expected = service.existingTransaction(wallet.publicKey);
         expect(old).toEqual(JSON.stringify(expected));
 
-        tx = txService.update(tx, wallet, to, 10).transaction;
+        tx = txService.update(tx, wallet, to, 10).left;
         service.addOrUpdate(tx);
 
         expected = service.existingTransaction(wallet.publicKey);
@@ -79,14 +78,15 @@ describe('Service: TransactionPool', () => {
             });
         });
 
-        // TODO: issue with ec and verify 
-        xdescribe('valid invalid transactions', () => {
-            let validTransactions = [];
+        // TODO: issue with ec and verify
+        describe('valid invalid transactions', () => {
+            let validTransactions;
 
             beforeEach(() => {
+                validTransactions = [...service.transactions];
                 for (let i = 1; i < 7; i++) {
-                    const w = new Wallet(100 * i);
-                    const t = service.createTransaction(w, '4ddr3ss', 10).transaction;
+                    const w = new Wallet(10 * i);
+                    const tx = service.createTransaction(w, '4ddr3ss', 10).left;
 
                     if (i % 2 === 0) {
                         tx.input.amount = 99999;

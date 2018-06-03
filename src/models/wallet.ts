@@ -9,6 +9,10 @@ export class Wallet {
         this.publicKey = this.keyPair.publicKey.encode('hex');
     }
 
+    get privateKey(): string {
+        return this.keyPair.privateKey;
+    }
+
     toString() {
         return `Wallet -
         Public Key  : ${this.publicKey.toString()}

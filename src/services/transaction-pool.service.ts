@@ -2,11 +2,12 @@ import { Service, Container } from 'typedi';
 import { Transaction, TransactionOutput } from '@app/models';
 import { TransactionService } from '@app/services/transaction.service';
 import { Wallet } from '@app/models/wallet';
+import { Pair } from '@app/utils';
 
 @Service()
 export class TransactionPoolService {
 
-    readonly transactions: Array<Transaction> = new Array();
+    readonly transactions: Array<Transaction> = [];
     private _transactionService: TransactionService = Container.get(TransactionService);
 
     addOrUpdate(transaction: Transaction): number {
@@ -26,9 +27,9 @@ export class TransactionPoolService {
         return this.transactions.find((t: Transaction) => t.input.address === address);
     }
 
-    createTransaction(from: Wallet, to: string, amount: number): { transaction: Transaction, message: string } {
+    createTransaction(from: Wallet, to: string, amount: number): Pair<Transaction, string> {
 
-        let response: { transaction: Transaction, message: string };
+        let response: Pair<Transaction, string>;
         let tx: Transaction = this.existingTransaction(from.publicKey);
 
         if (tx) {
@@ -37,8 +38,8 @@ export class TransactionPoolService {
             response = this._transactionService.create(from, to, amount);
         }
 
-        if (response.transaction) {
-            this.transactions[this.addOrUpdate(response.transaction)];
+        if (response.left) {
+            this.transactions[this.addOrUpdate(response.left)];
         }
 
         return response;

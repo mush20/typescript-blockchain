@@ -8,4 +8,8 @@ export class Keypair {
     get publicKey() {
         return this.key.getPublic()
     }
+
+    get privateKey() {
+        return this.key.getPrivate('hex');
+    }
 }

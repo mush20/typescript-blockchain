@@ -11,4 +11,8 @@ export class ConfigService {
     get MINE_RATE(): number {
         return config.MINE_RATE;
     }
+
+    get MINE_REWARD(): number {
+        return config.MINE_REWARD;
+    }
 }
