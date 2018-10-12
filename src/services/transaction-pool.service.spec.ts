@@ -15,33 +15,33 @@ describe('Service: TransactionPool', () => {
     beforeEach(() => {
         service = new TransactionPoolService();
         txService = new TransactionService();
-        tx = txService.create(wallet, to, amount).left;
-        service.addOrUpdate(tx);
+        tx = txService.createTransaction(wallet, to, amount).left;
+        service.addOrUpdateTransaction(tx);
     });
 
 
     it('should not duplicate a transaction', () => {
 
-        service.addOrUpdate(tx);
-        service.addOrUpdate(tx);
-        service.addOrUpdate(tx);
-        service.addOrUpdate(tx);
-        service.addOrUpdate(tx);
+        service.addOrUpdateTransaction(tx);
+        service.addOrUpdateTransaction(tx);
+        service.addOrUpdateTransaction(tx);
+        service.addOrUpdateTransaction(tx);
+        service.addOrUpdateTransaction(tx);
 
-        expect(service.existingTransaction(wallet.publicKey)).toEqual(tx);
+        expect(service.getExistingTransaction(wallet.publicKey)).toEqual(tx);
     });
 
-    it('should update a transaction', () => {
+    it('should updateTransaction a transaction', () => {
 
         const old = JSON.stringify(tx);
 
-        let expected = service.existingTransaction(wallet.publicKey);
+        let expected = service.getExistingTransaction(wallet.publicKey);
         expect(old).toEqual(JSON.stringify(expected));
 
-        tx = txService.update(tx, wallet, to, 10).left;
-        service.addOrUpdate(tx);
+        tx = txService.updateTransaction(tx, wallet, to, 10).left;
+        service.addOrUpdateTransaction(tx);
 
-        expected = service.existingTransaction(wallet.publicKey);
+        expected = service.getExistingTransaction(wallet.publicKey);
 
         expect(old).not.toEqual(JSON.stringify(expected));
         expect(JSON.stringify(tx)).toEqual(JSON.stringify(expected));
@@ -63,14 +63,14 @@ describe('Service: TransactionPool', () => {
 
             it('should double the amount of the original transaction', () => {
 
-                const expected = service.existingTransaction(wallet.publicKey).outputs.find(o => o.address === wallet.publicKey).amount;
+                const expected = service.getExistingTransaction(wallet.publicKey).outputs.find(o => o.address === wallet.publicKey).amount;
 
                 expect(expected).toEqual(wallet.balance - (amount * 2));
             });
 
             it('should clone the outputs for the recipient', () => {
 
-                const expected = service.existingTransaction(wallet.publicKey).outputs
+                const expected = service.getExistingTransaction(wallet.publicKey).outputs
                     .filter(o => o.address === to).map(o => o.amount);
 
                 expect(expected).toEqual([amount, amount]);
@@ -78,7 +78,7 @@ describe('Service: TransactionPool', () => {
             });
         });
 
-        // TODO: issue with ec and verify
+        // TODO: issue with ec and verifyTransaction
         describe('valid invalid transactions', () => {
             let validTransactions;
 
@@ -98,8 +98,8 @@ describe('Service: TransactionPool', () => {
 
             it('should return only valid transactions', () => {
 
-                expect(JSON.stringify(validTransactions)).toEqual(JSON.stringify(service.validTransactions()));
-                expect(validTransactions.length).toEqual(service.validTransactions().length);
+                expect(JSON.stringify(validTransactions)).toEqual(JSON.stringify(service.getValidTransactions()));
+                expect(validTransactions.length).toEqual(service.getValidTransactions().length);
 
             });
 

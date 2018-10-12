@@ -20,7 +20,7 @@ export class BlockchainService<T = any> {
         return this._blockchain.chain;
     }
 
-    mine(data): Block {
+    mineBlock(data): Block {
         let timestamp: number;
         const previousBlock: Block = this._blockchain.last();
         const previousHash: string = previousBlock.hash;
@@ -31,7 +31,7 @@ export class BlockchainService<T = any> {
         do {
             nonce++;
             timestamp = Date.now();
-            difficulty = this.adjustDifficulty(previousBlock, timestamp);
+            difficulty = this.adjustChainDifficulty(previousBlock, timestamp);
             hash = this.generateHash(timestamp, previousHash, nonce, difficulty, data);
         } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty))
 
@@ -39,10 +39,10 @@ export class BlockchainService<T = any> {
     }
 
     // Replaces the chain when longer and valid
-    replace(newChain: Block<T>[]): void {
+    replaceChain(newChain: Block<T>[]): void {
         if (newChain.length <= this._blockchain.chain.length) {
             return;
-        } else if (!this.isValid(newChain)) {
+        } else if (!this.isChainValid(newChain)) {
             return;
         }
 
@@ -50,7 +50,7 @@ export class BlockchainService<T = any> {
         this._blockchain.chain = newChain;
     }
 
-    protected adjustDifficulty(previous: Block, timestamp: number): number {
+    protected adjustChainDifficulty(previous: Block, timestamp: number): number {
         let {difficulty} = previous;
 
         return previous.timestamp + this._configService.MINE_RATE > timestamp ? difficulty + 1 : difficulty - 1;
@@ -66,7 +66,7 @@ export class BlockchainService<T = any> {
     }
 
     // validates a chain
-    protected isValid(chain: Block<T>[]): boolean {
+    protected isChainValid(chain: Block<T>[]): boolean {
 
         // Tests genesis block
         if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis(this._configService.DIFFICULTY))) {

@@ -17,9 +17,9 @@ export class BlockchainController {
         return this._blockchainService.getChain();
     }
 
-    @Post('/mine')
+    @Post('/mineBlock')
     mine(@Body() body) {
-        this._blockchainService.mine(body.data); // Mines a new block
+        this._blockchainService.mineBlock(body.data); // Mines a new block
         this._serverService.syncBlockChain(); // Sync all sockets
         return this.getAll(); // returns the whole chain
     }

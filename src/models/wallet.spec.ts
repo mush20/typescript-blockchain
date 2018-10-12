@@ -7,7 +7,7 @@ describe('Model: Wallet', () => {
     beforeEach(() => {
     });
 
-    it('should create an instance of Wallet', () => {
+    it('should createTransaction an instance of Wallet', () => {
         wallet = new Wallet();
 
         expect(wallet.balance).toEqual(0);
@@ -19,7 +19,7 @@ describe('Model: Wallet', () => {
 
     });
 
-    it('should create an instance of Wallet with amount', () => {
+    it('should createTransaction an instance of Wallet with amount', () => {
         const amount: number = 500;
         wallet = new Wallet(amount);
 

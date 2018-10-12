@@ -1,12 +1,12 @@
 import * as Websocket from 'ws';
 import { Service, Inject } from 'typedi';
 import { BlockchainService } from '@app/services/blockchain.service';
-import { MessageBlockchain } from '@app/models/message-blockchain';
-import { Message } from '@app/models/message';
 import { MessageTypes } from '@app/utils';
-import { MessageTransaction } from '@app/models/message-transaction';
 import { Transaction } from '@app/models';
 import { TransactionPoolService } from '@app/services/transaction-pool.service';
+import { MessageBlockchain } from '@app/models/messages/message-blockchain';
+import { MessageTransaction } from '@app/models/messages/message-transaction';
+import { Message } from '@app/models/messages/message';
 
 @Service()
 export class P2pService {
@@ -25,14 +25,9 @@ export class P2pService {
     // Connects the socket and sends a message with the blockchain
     connect(socket: Websocket): void {
         this.sockets.push(socket);
-        console.log('Socket connected');
-
         this.receive(socket);
-
         this.sendBlockchain(socket);
-
         socket.send(JSON.stringify(this._blockChainService.getChain()));
-
     }
 
     connectTo(peers: string[]): void {
@@ -59,10 +54,10 @@ export class P2pService {
 
             switch (parsed.type) {
                 case MessageTypes.BLOCK_CHAIN:
-                    this._blockChainService.replace(parsed.data);
+                    this._blockChainService.replaceChain(parsed.data);
                     break;
                 case MessageTypes.TRANSACTION:
-                    this._transactionPoolService.addOrUpdate(parsed.data);
+                    this._transactionPoolService.addOrUpdateTransaction(parsed.data);
 
             }
 

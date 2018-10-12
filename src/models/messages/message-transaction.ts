@@ -1,6 +1,6 @@
 import { Transaction } from '@app/models/transaction';
-import { Message } from '@app/models/message';
 import { MessageTypes } from '@app/utils';
+import { Message } from '@app/models/messages/message';
 
 export class MessageTransaction extends Message<Transaction> {
 

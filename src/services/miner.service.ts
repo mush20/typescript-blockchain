@@ -8,7 +8,7 @@ export class MinerService {
     private _transactionPoolService: TransactionPoolService = Container.get(TransactionPoolService);
 
     mine() {
-        const validTransactions: Transaction[] = this._transactionPoolService.validTransactions();
+        const validTransactions: Transaction[] = this._transactionPoolService.getValidTransactions();
 
 
     }

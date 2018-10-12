@@ -12,10 +12,10 @@ describe('Service: Transaction', () => {
     const to: string = 'r3c1p13nt';
     const trxService: TransactionService = new TransactionService();
 
-    it('should not create a transaction as the balance is insufficient', () => {
+    it('should not createTransaction a transaction as the balance is insufficient', () => {
         wallet.balance = 500;
         const amount: number = 50000;
-        const {left, right} = trxService.create(wallet, to, amount);
+        const {left, right} = trxService.createTransaction(wallet, to, amount);
 
         expect(left).toBeNull();
         expect(right).toEqual(`Amount ${amount} exceeds balance`);
@@ -32,10 +32,10 @@ describe('Service: Transaction', () => {
             wallet.balance = 500000;
             amount = 50;
             balance = wallet.balance - amount;
-            response = trxService.create(wallet, to, amount);
+            response = trxService.createTransaction(wallet, to, amount);
         });
 
-        it('should create a new transaction', () => {
+        it('should createTransaction a new transaction', () => {
 
             expect(response.left).not.toBeNull();
             expect(response.right).toEqual('Transaction created successfully');
@@ -61,7 +61,7 @@ describe('Service: Transaction', () => {
             beforeEach(() => {
                 nextAmount = 20;
                 nextTo = 'n3xt-r3c1p13nt';
-                response = trxService.update(response.left, wallet, nextTo, nextAmount);
+                response = trxService.updateTransaction(response.left, wallet, nextTo, nextAmount);
             });
 
             it(`subtract the next amount from sender's output`, () => {

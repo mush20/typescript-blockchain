@@ -1,6 +1,6 @@
 import { Block } from '@app/models/block';
-import { Message } from '@app/models/message';
 import { MessageTypes } from '@app/utils';
+import { Message } from '@app/models/messages/message';
 
 export class MessageBlockchain extends Message<Block[]> {
 

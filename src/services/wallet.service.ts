@@ -8,7 +8,7 @@ export class WalletService {
 
     }
 
-    create(): Wallet {
+    createWallet(): Wallet {
 
         return new Wallet();
 

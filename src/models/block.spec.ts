@@ -12,7 +12,7 @@ describe('Model: Block', () => {
         block = new Block(timestamp, genesis.hash, 'baz', 0, 4, data);
     });
 
-    it('should create an instance of Block', () => {
+    it('should createTransaction an instance of Block', () => {
 
         expect(block.timestamp).toEqual(timestamp);
         expect(block.previousHash).toEqual(genesis.hash);
@@ -20,7 +20,7 @@ describe('Model: Block', () => {
         expect(block.data).toEqual(data);
     });
 
-    it('should create a genesis block', () => {
+    it('should createTransaction a genesis block', () => {
         const expected: string = `Block -
             Timestamp       : 0
             Previous Hash   : -----

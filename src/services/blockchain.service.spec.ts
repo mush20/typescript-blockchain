@@ -30,38 +30,38 @@ describe('Service: Blockchain', () => {
         Container.reset();
         bcs1 = new BlockchainService();
         bcs2 = new BlockchainService();
-        mine = bcs2.mine('foo');
+        mine = bcs2.mineBlock('foo');
     });
 
     it('should start with genesis block', () => {
         expect(bcs1.getChain()[0].hash).toEqual('f1r57-h45h');
     });
 
-    it('should replace the chain with a valid chain', () => {
+    it('should replaceChain the chain with a valid chain', () => {
 
-        bcs1.replace(bcs2.getChain());
+        bcs1.replaceChain(bcs2.getChain());
 
         expect(bcs1.getChain()).toEqual(bcs2.getChain());
 
     });
 
-    it('should not replace the chain for a shorter chain', () => {
+    it('should not replaceChain the chain for a shorter chain', () => {
 
-        bcs2.replace(bcs1.getChain());
+        bcs2.replaceChain(bcs1.getChain());
         expect(bcs2.getChain()).not.toEqual(bcs1.getChain());
 
     });
 
-    it('should not replace the chain for an invalid chain', () => {
+    it('should not replaceChain the chain for an invalid chain', () => {
 
         bcs2.getChain()[1].data = 'not foo';
-        bcs1.replace(bcs2.getChain());
+        bcs1.replaceChain(bcs2.getChain());
 
         expect(bcs1.getChain()).not.toEqual(bcs2.getChain());
 
     });
 
-    it('should mine a block', () => {
+    it('should mineBlock a block', () => {
         expect(mine.hash).not.toBeNull();
         expect(mine.data).toEqual('foo');
         expect(mine.previousHash).toEqual(bcs1.getChain()[0].hash);
@@ -78,7 +78,7 @@ describe('Service: Blockchain', () => {
 
             Container.set(ConfigService, new ConfigServiceMock(1));
             let bcs3: BlockchainService<string> = Container.get(BlockchainService);
-            const expected = bcs3.mine('foo');
+            const expected = bcs3.mineBlock('foo');
             expect(expected.difficulty).toEqual(1);
 
         });
@@ -88,10 +88,10 @@ describe('Service: Blockchain', () => {
             Container.set(ConfigService, new ConfigServiceMock(360000000));
             let bcs3: BlockchainService<string> = Container.get(BlockchainService);
 
-            bcs3.mine('foo');
-            bcs3.mine('foo');
-            bcs3.mine('foo');
-            const expected = bcs3.mine('foo');
+            bcs3.mineBlock('foo');
+            bcs3.mineBlock('foo');
+            bcs3.mineBlock('foo');
+            const expected = bcs3.mineBlock('foo');
 
             expect(expected.difficulty).toEqual(4);
 
